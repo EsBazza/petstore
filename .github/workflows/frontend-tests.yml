@@ -1,0 +1,50 @@
+name: Frontend Tests
+
+on:
+  push:
+    branches: [ main, develop, '001-petstore-fullstack' ]
+    paths:
+      - 'frontend/**'
+      - '.github/workflows/frontend-tests.yml'
+  pull_request:
+    branches: [ main, develop ]
+    paths:
+      - 'frontend/**'
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [18.x, 20.x]
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Setup Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+        cache-dependency-path: 'frontend/package-lock.json'
+
+    - name: Install dependencies
+      working-directory: frontend
+      run: npm ci
+
+    - name: Run tests
+      working-directory: frontend
+      run: npm test
+
+    - name: Generate coverage report
+      if: matrix.node-version == '20.x'
+      working-directory: frontend
+      run: npm run test:coverage
+
+    - name: Archive coverage reports
+      if: always() && matrix.node-version == '20.x'
+      uses: actions/upload-artifact@v3
+      with:
+        name: frontend-coverage
+        path: frontend/coverage/

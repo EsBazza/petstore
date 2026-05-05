@@ -1,0 +1,65 @@
+name: Backend Tests
+
+on:
+  push:
+    branches: [ main, develop, '001-petstore-fullstack' ]
+    paths:
+      - 'backend/**'
+      - '.github/workflows/backend-tests.yml'
+  pull_request:
+    branches: [ main, develop ]
+    paths:
+      - 'backend/**'
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: petstore_user
+          POSTGRES_PASSWORD: petstore_password
+          POSTGRES_DB: petstore_db
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Set up Java 17
+      uses: actions/setup-java@v3
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+        cache: maven
+
+    - name: Build with Maven
+      working-directory: backend
+      run: mvn clean compile
+
+    - name: Run tests
+      working-directory: backend
+      env:
+        SPRING_DATASOURCE_URL: jdbc:postgresql://localhost:5432/petstore_db
+        SPRING_DATASOURCE_USERNAME: petstore_user
+        SPRING_DATASOURCE_PASSWORD: petstore_password
+      run: mvn test
+
+    - name: Generate test report
+      if: always()
+      working-directory: backend
+      run: mvn surefire-report:report
+
+    - name: Archive test results
+      if: always()
+      uses: actions/upload-artifact@v3
+      with:
+        name: backend-test-reports
+        path: backend/target/surefire-reports/

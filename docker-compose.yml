@@ -1,0 +1,47 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: petstore-postgres
+    environment:
+      POSTGRES_USER: petstore_user
+      POSTGRES_PASSWORD: petstore_password
+      POSTGRES_DB: petstore_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - petstore-postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U petstore_user"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - petstore-network
+
+  # Uncomment to run backend in Docker
+  # backend:
+  #   build:
+  #     context: ./backend
+  #     dockerfile: Dockerfile
+  #   container_name: petstore-backend
+  #   environment:
+  #     SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/petstore_db
+  #     SPRING_DATASOURCE_USERNAME: petstore_user
+  #     SPRING_DATASOURCE_PASSWORD: petstore_password
+  #   ports:
+  #     - "8080:8080"
+  #   depends_on:
+  #     postgres:
+  #       condition: service_healthy
+  #   networks:
+  #     - petstore-network
+
+volumes:
+  petstore-postgres-data:
+    driver: local
+
+networks:
+  petstore-network:
+    driver: bridge
