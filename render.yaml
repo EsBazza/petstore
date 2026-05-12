@@ -36,7 +36,6 @@ services:
   - type: pserv
     name: petstore-postgres
     plan: free
-    ipWhitelist: []
     envVars:
       - key: POSTGRES_DB
         value: petstore_db
