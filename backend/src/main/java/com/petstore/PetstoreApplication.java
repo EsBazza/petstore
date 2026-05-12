@@ -2,6 +2,7 @@ package com.petstore;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 /**
  * Main entry point for Petstore Spring Boot application.
@@ -10,6 +11,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * Features include browsing, creating, updating, and deleting pet listings.
  */
 @SpringBootApplication
+@EnableJpaAuditing
 public class PetstoreApplication {
 
   /**

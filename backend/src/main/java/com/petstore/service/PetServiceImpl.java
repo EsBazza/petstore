@@ -10,6 +10,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,6 +35,13 @@ public class PetServiceImpl implements PetService {
     return petRepository.findAllByOrderByCreatedAtDesc().stream()
         .map(this::convertToResponse)
         .collect(Collectors.toList());
+  }
+
+  @Override
+  public Page<PetResponse> getPetsPaginated(Pageable pageable) {
+    log.debug("Fetching paginated pets: {}", pageable);
+    return petRepository.findAll(pageable)
+        .map(this::convertToResponse);
   }
 
   @Override

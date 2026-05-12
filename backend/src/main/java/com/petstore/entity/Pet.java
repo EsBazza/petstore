@@ -4,16 +4,18 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.PrePersist;
-import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 /**
  * Pet entity representing a pet in the petstore catalog.
@@ -23,6 +25,7 @@ import jakarta.validation.constraints.Pattern;
  */
 @Entity
 @Table(name = "pet")
+@EntityListeners(AuditingEntityListener.class)
 public class Pet {
 
   /**
@@ -49,7 +52,7 @@ public class Pet {
    * Price of the pet in USD (required, minimum 0).
    */
   @NotNull(message = "Pet price is required")
-  @DecimalMin(value = "0.0", inclusive = false, message = "Price must be greater than 0")
+  @DecimalMin(value = "0.0", inclusive = true, message = "Price must be at least 0")
   @Column(nullable = false, precision = 10, scale = 2)
   private BigDecimal price;
 
@@ -66,12 +69,14 @@ public class Pet {
   /**
    * Timestamp when the pet was created (auto-set).
    */
+  @CreatedDate
   @Column(nullable = false, updatable = false)
   private LocalDateTime createdAt;
 
   /**
    * Timestamp when the pet was last updated (auto-set).
    */
+  @LastModifiedDate
   @Column(nullable = false)
   private LocalDateTime updatedAt;
 
@@ -85,23 +90,6 @@ public class Pet {
     this.imageUrl = imageUrl;
     this.createdAt = createdAt;
     this.updatedAt = updatedAt;
-  }
-
-  /**
-   * Callback to set createdAt before persisting.
-   */
-  @PrePersist
-  protected void onCreate() {
-    createdAt = LocalDateTime.now();
-    updatedAt = LocalDateTime.now();
-  }
-
-  /**
-   * Callback to update updatedAt before updating.
-   */
-  @PreUpdate
-  protected void onUpdate() {
-    updatedAt = LocalDateTime.now();
   }
 
   // Getters and Setters

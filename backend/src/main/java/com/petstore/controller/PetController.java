@@ -10,6 +10,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -35,12 +39,23 @@ public class PetController {
   }
 
   /**
-   * Get all pets.
+   * Get all pets (paginated).
    */
   @GetMapping
   @ResponseStatus(HttpStatus.OK)
-  public ResponseEntity<List<PetResponse>> getAllPets() {
-    log.info("GET /api/pets - Fetching all pets");
+  public ResponseEntity<Page<PetResponse>> getAllPets(
+      @PageableDefault(size = 12, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
+    log.info("GET /api/pets - Fetching pets with pagination: {}", pageable);
+    return ResponseEntity.ok(petService.getPetsPaginated(pageable));
+  }
+
+  /**
+   * Get all pets (non-paginated, legacy).
+   */
+  @GetMapping("/all")
+  @ResponseStatus(HttpStatus.OK)
+  public ResponseEntity<List<PetResponse>> getAllPetsList() {
+    log.info("GET /api/pets/all - Fetching all pets list");
     return ResponseEntity.ok(petService.getAllPets());
   }
 

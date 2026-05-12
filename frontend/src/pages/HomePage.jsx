@@ -1,27 +1,31 @@
 import React, { useState, useMemo } from 'react';
-import { Container, Box, Typography, Button, Alert, TextField, Slider, Stack } from '@mui/material';
+import { Container, Box, Typography, Button, Alert, TextField, Stack, MenuItem, Select, FormControl, InputLabel } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import PetList from '../components/PetList';
 import AddPetModal from '../components/AddPetModal';
 import { usePets } from '../hooks/usePets';
 
 /**
- * HomePage component - main page displaying all available pets with filtering.
+ * HomePage component - main page displaying all available pets with simple sorting.
  */
 export default function HomePage() {
   const { pets, loading, error, fetchPets } = usePets();
   const [addModalOpen, setAddModalOpen] = useState(false);
   const [search, setSearch] = useState('');
-  const [priceRange, setPriceRange] = useState([0, 1000]);
+  const [sort, setSort] = useState('newest'); // Options: newest, name-asc, price-asc
 
-  // Filtered logic
+  // Filtered and Sorted logic
   const filteredPets = useMemo(() => {
-    return pets.filter(pet => {
-      const matchesSearch = pet.name.toLowerCase().includes(search.toLowerCase());
-      const matchesPrice = pet.price >= priceRange[0] && pet.price <= priceRange[1];
-      return matchesSearch && matchesPrice;
+    let result = pets.filter(pet => 
+      pet.name.toLowerCase().includes(search.toLowerCase())
+    );
+
+    return result.sort((a, b) => {
+      if (sort === 'name-asc') return a.name.localeCompare(b.name);
+      if (sort === 'price-asc') return a.price - b.price;
+      return new Date(b.createdAt) - new Date(a.createdAt); // newest
     });
-  }, [pets, search, priceRange]);
+  }, [pets, search, sort]);
 
   return (
     <Container maxWidth="lg" sx={{ py: 4 }}>
@@ -54,7 +58,7 @@ export default function HomePage() {
         </Button>
       </Box>
 
-      {/* Filters Section */}
+      {/* Controls Section */}
       <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2} sx={{ mb: 4, p: 3, bgcolor: 'rgba(255,255,255,0.7)', borderRadius: 4, backdropFilter: 'blur(10px)' }}>
         <TextField 
           label="Search pets..." 
@@ -64,16 +68,18 @@ export default function HomePage() {
           onChange={(e) => setSearch(e.target.value)}
           fullWidth
         />
-        <Box sx={{ width: 200, px: 2 }}>
-          <Typography variant="caption">Max Price: ${priceRange[1]}</Typography>
-          <Slider
-            value={priceRange[1]}
-            onChange={(e, val) => setPriceRange([0, val])}
-            valueLabelDisplay="auto"
-            max={2000}
-            size="small"
-          />
-        </Box>
+        <FormControl size="small" sx={{ minWidth: 200 }}>
+          <InputLabel>Sort By</InputLabel>
+          <Select
+            value={sort}
+            label="Sort By"
+            onChange={(e) => setSort(e.target.value)}
+          >
+            <MenuItem value="newest">Newest</MenuItem>
+            <MenuItem value="name-asc">Name (A-Z)</MenuItem>
+            <MenuItem value="price-asc">Price (Lowest to Highest)</MenuItem>
+          </Select>
+        </FormControl>
       </Stack>
 
       {/* Global Error Display */}

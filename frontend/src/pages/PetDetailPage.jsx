@@ -13,7 +13,8 @@ import {
   Divider,
   IconButton,
   Stack,
-  Paper
+  Paper,
+  Grid
 } from '@mui/material';
 import { ArrowLeft, Heart, Share2, DollarSign, Calendar } from 'lucide-react';
 import { motion } from 'framer-motion';
