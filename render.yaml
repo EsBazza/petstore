@@ -2,9 +2,10 @@ services:
   - type: web
     name: petstore-backend
     runtime: java
-    plan: starter
+    plan: free
     buildCommand: "cd backend && mvn clean package"
     startCommand: "java -jar backend/target/petstore-api-1.0.0.jar"
+    healthCheckPath: /api/health
     envVars:
       - key: PORT
         value: 8080
@@ -34,7 +35,7 @@ services:
 
   - type: pserv
     name: petstore-postgres
-    plan: starter
+    plan: free
     ipWhitelist: []
     envVars:
       - key: POSTGRES_DB

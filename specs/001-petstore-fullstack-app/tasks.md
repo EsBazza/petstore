@@ -97,31 +97,31 @@ description: "Implementation tasks for Petstore Fullstack Application"
 
 ### Backend Database & ORM Layer
 
-- [ ] T032 Create `backend/src/main/java/com/petstore/entity/Pet.java` (JPA entity with @Entity, @Table("pet"), fields: id (PK), name, description, price, imageUrl, createdAt, updatedAt; add @GeneratedValue, @Column annotations)
+- [x] T032 Create `backend/src/main/java/com/petstore/entity/Pet.java` (JPA entity with @Entity, @Table("pet"), fields: id (PK), name, description, price, imageUrl, createdAt, updatedAt; add @GeneratedValue, @Column annotations)
 - [ ] T033 Create validation annotations in Pet entity: @NotBlank on name, @NotNull on price, @URL on imageUrl
 - [ ] T034 [P] Create `backend/src/main/java/com/petstore/repository/PetRepository.java` (Spring Data JPA interface extending JpaRepository<Pet, Long>, add custom method: `List<Pet> findAllByOrderByCreatedAtDesc()`)
 - [ ] T035 [P] Create `backend/src/test/java/com/petstore/repository/PetRepositoryTest.java` with tests for CRUD operations and custom queries
 
 ### Backend Service Layer
 
-- [ ] T036 Create `backend/src/main/java/com/petstore/service/PetService.java` with methods: `getAllPets()`, `getPetById(Long)`, `createPet(Pet)`, `updatePet(Long, Pet)`, `deletePet(Long)`
+- [x] T036 Create `backend/src/main/java/com/petstore/service/PetService.java` with methods: `getAllPets()`, `getPetById(Long)`, `createPet(Pet)`, `updatePet(Long, Pet)`, `deletePet(Long)`
 - [ ] T037 Add validation and error handling in PetService: throw `PetNotFoundException` when pet not found, validate input before persistence
 - [ ] T038 [P] Create `backend/src/test/java/com/petstore/service/PetServiceTest.java` with unit tests for all service methods using Mockito
 
 ### Backend DTO Layer
 
-- [ ] T039 Create `backend/src/main/java/com/petstore/dto/PetCreateRequest.java` (DTO for POST request with name, description, price, imageUrl fields, add @NotBlank, @Min annotations)
+- [x] T039 Create `backend/src/main/java/com/petstore/dto/PetCreateRequest.java` (DTO for POST request with name, description, price, imageUrl fields, add @NotBlank, @Min annotations)
 - [ ] T040 [P] Create `backend/src/main/java/com/petstore/dto/PetUpdateRequest.java` (DTO for PUT request with name, description, price, imageUrl - all optional)
-- [ ] T041 [P] Create `backend/src/main/java/com/petstore/dto/PetResponse.java` (DTO for GET response with id, name, description, price, imageUrl, createdAt, updatedAt)
+- [x] T041 [P] Create `backend/src/main/java/com/petstore/dto/PetResponse.java` (DTO for GET response with id, name, description, price, imageUrl, createdAt, updatedAt)
 
 ### Backend Exception Handling
 
-- [ ] T042 Create `backend/src/main/java/com/petstore/exception/PetNotFoundException.java` (custom exception extending RuntimeException)
+- [x] T042 Create `backend/src/main/java/com/petstore/exception/PetNotFoundException.java` (custom exception extending RuntimeException)
 - [x] T043 [P] Create `backend/src/main/java/com/petstore/config/GlobalExceptionHandler.java` (@ControllerAdvice with @ExceptionHandler for PetNotFoundException returning 404, validation errors returning 400) ✅ FIXED AMBIGUITY
 
 ### Backend API Controller Scaffold
 
-- [ ] T044 Create `backend/src/main/java/com/petstore/controller/PetController.java` with skeleton methods for all endpoints (methods: getAllPets, getPetById, createPet, updatePet, deletePet with @GetMapping, @PostMapping, @PutMapping, @DeleteMapping annotations)
+- [x] T044 Create `backend/src/main/java/com/petstore/controller/PetController.java` with skeleton methods for all endpoints (methods: getAllPets, getPetById, createPet, updatePet, deletePet with @GetMapping, @PostMapping, @PutMapping, @DeleteMapping annotations)
 - [ ] T045 [P] Create `backend/src/test/java/com/petstore/controller/PetControllerTest.java` with integration test scaffold for all endpoints using MockMvc
 
 ### Frontend API Client Layer
@@ -230,31 +230,31 @@ description: "Implementation tasks for Petstore Fullstack Application"
 
 ### Backend: Create Pet API Endpoint
 
-- [ ] T083 Implement `backend/src/main/java/com/petstore/controller/PetController.java` method: `createPet(@RequestBody PetCreateRequest request)` - POST `/api/pets` accepting PetCreateRequest DTO, returning PetResponse with 201 Created status
-- [ ] T084 Implement validation: @Valid on PetCreateRequest, catch ConstraintViolationException and return 400 with validation errors
-- [ ] T085 [P] Implement `backend/src/main/java/com/petstore/service/PetService.java` method: `createPet(PetCreateRequest)` - maps DTO to Pet entity, validates business rules (e.g., price > 0), saves to repository, returns saved Pet
-- [ ] T086 [P] Add comprehensive JavaDoc to createPet() explaining validation, error cases, return response format
+- [x] T083 Implement `backend/src/main/java/com/petstore/controller/PetController.java` method: `createPet(@RequestBody PetCreateRequest request)` - POST `/api/pets` accepting PetCreateRequest DTO, returning PetResponse with 201 Created status
+- [x] T084 Implement validation: @Valid on PetCreateRequest, catch ConstraintViolationException and return 400 with validation errors
+- [x] T085 [P] Implement `backend/src/main/java/com/petstore/service/PetService.java` method: `createPet(PetCreateRequest)` - maps DTO to Pet entity, validates business rules (e.g., price > 0), saves to repository, returns saved Pet
+- [x] T086 [P] Add comprehensive JavaDoc to createPet() explaining validation, error cases, return response format
 
 ### Backend: Create Pet API Tests
 
-- [ ] T087 Create test in `backend/src/test/java/com/petstore/controller/PetControllerTest.java`: POST `/api/pets` with valid data returns 201 Created with created pet
-- [ ] T088 Add test: POST `/api/pets` with missing required field returns 400 Bad Request with validation error details
-- [ ] T089 [P] Add test: POST `/api/pets` with invalid imageUrl format returns 400 with error
-- [ ] T090 [P] Add test: POST `/api/pets` persists pet to database (verify with follow-up GET call)
-- [ ] T091 [P] Add test: POST `/api/pets` returns PetResponse with generated id and timestamps
+- [x] T087 Create test in `backend/src/test/java/com/petstore/controller/PetControllerTest.java`: POST `/api/pets` with valid data returns 201 Created with created pet
+- [x] T088 Add test: POST `/api/pets` with missing required field returns 400 Bad Request with validation error details
+- [x] T089 [P] Add test: POST `/api/pets` with invalid imageUrl format returns 400 with error
+- [x] T090 [P] Add test: POST `/api/pets` persists pet to database (verify with follow-up GET call)
+- [x] T091 [P] Add test: POST `/api/pets` returns PetResponse with generated id and timestamps
 
 ### Frontend: Add Pet Form Component
 
-- [ ] T092 Create `frontend/src/components/PetForm.jsx` component with form fields: name (text), description (textarea), price (number), imageUrl (text), Submit button, Cancel button
-- [ ] T093 Add form state management: useState for each field (name, description, price, imageUrl), use controlled inputs
-- [ ] T094 [P] Add form validation: name required and >2 chars, price required and >0, imageUrl valid URL, display error messages inline on blur or submit
-- [ ] T095 Add MUI form components: TextField for name/imageUrl, TextField with multiline for description, TextField with type="number" for price, Button for submit/cancel
+- [x] T092 Create `frontend/src/components/PetForm.jsx` component with form fields: name (text), description (textarea), price (number), imageUrl (text), Submit button, Cancel button
+- [x] T093 Add form state management: useState for each field (name, description, price, imageUrl), use controlled inputs
+- [x] T094 [P] Add form validation: name required and >2 chars, price required and >0, imageUrl valid URL, display error messages inline on blur or submit
+- [x] T095 Add MUI form components: TextField for name/imageUrl, TextField with multiline for description, TextField with type="number" for price, Button for submit/cancel
 
 ### Frontend: Add Pet Modal/Dialog
 
-- [ ] T096 Create `frontend/src/components/AddPetModal.jsx` component wrapping PetForm in MUI Dialog, opened via "Add Pet" button in header/toolbar
-- [ ] T097 [P] Add logic: on form submit, call `api.createPet(formData)` → on success, close dialog, add pet to list, show success toast; on error, show error toast and keep dialog open
-- [ ] T098 [P] Add loading state: disable submit button while request is in flight, show loading spinner
+- [x] T096 Create `frontend/src/components/AddPetModal.jsx` component wrapping PetForm in MUI Dialog, opened via "Add Pet" button in header/toolbar
+- [x] T097 [P] Add logic: on form submit, call `api.createPet(formData)` → on success, close dialog, add pet to list, show success toast; on error, show error toast and keep dialog open
+- [x] T098 [P] Add loading state: disable submit button while request is in flight, show loading spinner
 
 ### Frontend: Pet Form Tests
 
@@ -266,9 +266,9 @@ description: "Implementation tasks for Petstore Fullstack Application"
 
 ### Frontend: Home Page Enhancement
 
-- [ ] T104 Update `frontend/src/pages/HomePage.jsx` to add "Add Pet" button in header/toolbar (MUI AppBar with Button)
-- [ ] T105 [P] Wire AddPetModal to HomePage: show modal when button clicked, refresh pet list on successful creation
-- [ ] T106 [P] Add success toast notification when pet is added (using optional toast library or simple alert)
+- [x] T104 Update `frontend/src/pages/HomePage.jsx` to add "Add Pet" button in header/toolbar (MUI AppBar with Button)
+- [x] T105 [P] Wire AddPetModal to HomePage: show modal when button clicked, refresh pet list on successful creation
+- [x] T106 [P] Add success toast notification when pet is added (using optional toast library or simple alert)
 
 **User Story 2 Verification**:
 - ✅ POST `/api/pets` endpoint accepts and validates pet data
@@ -535,6 +535,39 @@ description: "Implementation tasks for Petstore Fullstack Application"
 - [ ] T199 [P] Verify `.env.example` has all required variables with helpful comments
 - [ ] T200 Commit final code: `git commit -m "feat: complete petstore CRUD application with full test coverage"`
 
+---
+
+## Phase 9: UI Modernization & Deployment Enhancements (Bonus Phase)
+
+**Purpose**: Professional-grade UI/UX and production-ready deployment
+**Completion Signal**: Glassmorphism applied, animations smooth, optimistic updates functional, health checks active
+
+### UI Modernization
+
+- [x] T201 Install and configure `framer-motion` and `sonner` in frontend
+- [x] T202 Update `frontend/src/styles/theme.js` for glassmorphism (backdrop blur, transparency) and modern typography (Outfit/Inter)
+- [x] T203 Implement staggered entrance animations in `frontend/src/components/PetList.jsx` using `framer-motion`
+- [x] T204 Add hover and tap animations to `frontend/src/components/PetCard.jsx` and buttons
+- [x] T205 Replace standard alerts with `sonner` toast notifications for all CRUD operations
+
+### Optimistic Updates Implementation
+
+- [x] T206 Refactor `frontend/src/hooks/usePets.js` to support optimistic updates for `addPet`, `updatePetData`, and `removePet`
+- [x] T207 Implement robust rollback logic in `usePets.js` for failed optimistic updates
+- [x] T208 Add visual feedback for "pending" optimistic states (e.g., subtle opacity change on card)
+
+### Deployment & Health
+
+- [x] T209 Implement `/api/health` endpoint in `backend/src/main/java/com/petstore/controller/PetController.java` returning 200 OK
+- [x] T210 Update `render.yaml` with health check path and optimized build settings
+
+**Phase 9 Completion Verification**:
+- ✅ UI features glassmorphism and smooth animations
+- ✅ CRUD operations feel "instant" via optimistic updates
+- ✅ Rollback logic verified on API failure
+- ✅ Health check endpoint responds correctly
+- ✅ Render deployment configuration optimized
+
 **Phase 8 Completion Verification**:
 - ✅ All CRUD operations tested end-to-end
 - ✅ Error handling comprehensive across all layers
@@ -597,16 +630,33 @@ T150-T164 (US5) → T165-T200 (Integration & QA)
 | **Integration & QA** | 36 | Polish Phase |
 | **TOTAL** | **196 tasks** | Ready for Implementation |
 
-**Implementation Notes**:
-- Each task is independently executable and testable
-- [P] markers indicate parallelizable tasks (different files, no immediate dependencies)
-- Tasks organized by user story enable independent delivery
-- Each user story is independently deployable once completed
-- Quality gates include tests for each feature before moving to next
-- Constitution principles (TDD, clean code, quality assurance) embedded in every task
-
 ---
 
-**Status**: ✅ **TASKS READY FOR IMPLEMENTATION**
+## Phase 10: Gallery Filters & Details Overhaul
 
-Begin with Phase 1 (Tasks T001-T031) for project setup, then proceed sequentially through phases ensuring quality gates pass at each stage.
+**Purpose**: Professional-grade product discovery and enhanced detail view.
+**Completion Signal**: Search/filter functional, detail page modernized, related pets displayed.
+
+### Product Gallery Filters
+
+- [ ] T211 Create `frontend/src/components/PetFilters.jsx` with search input and price slider
+- [ ] T212 Implement `usePets.js` logic for `filteredPets` (filter by name and price)
+- [ ] T213 Integrate `PetFilters.jsx` into `HomePage.jsx` and update `PetList` to render `filteredPets`
+
+### Details Page Overhaul
+
+- [ ] T214 Refactor `frontend/src/pages/PetDetailPage.jsx` with glassmorphism styles
+- [ ] T215 Add `framer-motion` animations to `PetDetailPage.jsx`
+- [ ] T216 Implement "Related Pets" section on `PetDetailPage.jsx` (fetch by similar price)
+- [ ] T217 Add interactivity: "Heart" (wishlist) and "Share" buttons
+
+### Deployment Optimization
+
+- [ ] T218 Update `render.yaml` to set backend and database to `plan: free`
+- [ ] T219 Verify application still builds and health checks pass on free tier
+
+**Phase 10 Completion Verification**:
+- ✅ Search and filter work correctly
+- ✅ Detail page is visually enhanced with animations and glassmorphism
+- ✅ Related pets section renders correctly
+- ✅ App is configured for Render free tier

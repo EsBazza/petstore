@@ -33,12 +33,17 @@ const theme = createTheme({
       dark: '#C62828',
     },
     background: {
-      default: '#F8F9FA',
+      default: '#F0F2F5',
       paper: '#FFFFFF',
+    },
+    glass: {
+      background: 'rgba(255, 255, 255, 0.7)',
+      border: '1px solid rgba(255, 255, 255, 0.3)',
+      backdropFilter: 'blur(10px)',
     },
   },
   typography: {
-    fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
+    fontFamily: '"Outfit", "Roboto", "Helvetica", "Arial", sans-serif',
     h1: {
       fontSize: '2.5rem',
       fontWeight: 700,
@@ -89,6 +94,7 @@ const theme = createTheme({
           textTransform: 'none',
           fontWeight: 600,
           padding: '10px 24px',
+          backdropFilter: 'blur(4px)',
         },
         contained: {
           boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
@@ -101,12 +107,15 @@ const theme = createTheme({
     MuiCard: {
       styleOverrides: {
         root: {
-          borderRadius: 16,
-          boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
-          transition: 'transform 0.3s ease, box-shadow 0.3s ease',
+          borderRadius: 20,
+          background: 'rgba(255, 255, 255, 0.7)',
+          backdropFilter: 'blur(10px)',
+          border: '1px solid rgba(255, 255, 255, 0.3)',
+          boxShadow: '0 4px 30px rgba(0, 0, 0, 0.1)',
+          transition: 'transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease',
           '&:hover': {
-            transform: 'translateY(-4px)',
-            boxShadow: '0 8px 16px rgba(0, 0, 0, 0.15)',
+            transform: 'translateY(-8px)',
+            boxShadow: '0 12px 24px rgba(0, 0, 0, 0.2)',
           },
         },
       },

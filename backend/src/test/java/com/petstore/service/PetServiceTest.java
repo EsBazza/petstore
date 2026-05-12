@@ -38,7 +38,7 @@ class PetServiceTest {
   private PetRepository petRepository;
 
   @InjectMocks
-  private PetService petService;
+  private PetServiceImpl petService;
 
   private Pet testPet;
 

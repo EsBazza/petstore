@@ -6,8 +6,8 @@ import com.petstore.dto.PetUpdateRequest;
 import com.petstore.service.PetService;
 import java.util.List;
 import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -22,21 +22,20 @@ import org.springframework.web.bind.annotation.RestController;
 
 /**
  * REST Controller for Pet operations.
- * 
- * Handles HTTP requests for CRUD operations on pets.
  */
-@Slf4j
 @RestController
 @RequestMapping("/api/pets")
-@RequiredArgsConstructor
 public class PetController {
 
+  private static final Logger log = LoggerFactory.getLogger(PetController.class);
   private final PetService petService;
+
+  public PetController(PetService petService) {
+    this.petService = petService;
+  }
 
   /**
    * Get all pets.
-   *
-   * @return List of all pets
    */
   @GetMapping
   @ResponseStatus(HttpStatus.OK)
@@ -47,9 +46,6 @@ public class PetController {
 
   /**
    * Get a pet by ID.
-   *
-   * @param id the pet ID
-   * @return the pet details
    */
   @GetMapping("/{id}")
   @ResponseStatus(HttpStatus.OK)
@@ -60,23 +56,17 @@ public class PetController {
 
   /**
    * Create a new pet.
-   *
-   * @param request the pet creation request
-   * @return the created pet
    */
   @PostMapping
   @ResponseStatus(HttpStatus.CREATED)
   public ResponseEntity<PetResponse> createPet(@Valid @RequestBody PetCreateRequest request) {
-    log.info("POST /api/pets - Creating new pet");
-    return ResponseEntity.status(HttpStatus.CREATED).body(petService.createPet(request));
+    log.info("POST /api/pets - Creating new pet: {}", request.getName());
+    PetResponse response = petService.createPet(request);
+    return ResponseEntity.status(HttpStatus.CREATED).body(response);
   }
 
   /**
    * Update an existing pet.
-   *
-   * @param id the pet ID
-   * @param request the pet update request
-   * @return the updated pet
    */
   @PutMapping("/{id}")
   @ResponseStatus(HttpStatus.OK)
@@ -88,9 +78,6 @@ public class PetController {
 
   /**
    * Delete a pet.
-   *
-   * @param id the pet ID
-   * @return no content response
    */
   @DeleteMapping("/{id}")
   @ResponseStatus(HttpStatus.NO_CONTENT)

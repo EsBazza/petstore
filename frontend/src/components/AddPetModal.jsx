@@ -1,75 +1,57 @@
-import React, { useState } from 'react';
-import {
-  Dialog,
-  DialogTitle,
-  DialogContent,
+import React from 'react';
+import { 
+  Dialog, 
+  DialogTitle, 
+  DialogContent, 
   IconButton,
-  Snackbar,
-  Alert
+  Box
 } from '@mui/material';
-import CloseIcon from '@mui/icons-material/Close';
+import { X } from 'lucide-react';
 import PetForm from './PetForm';
 import { usePets } from '../hooks/usePets';
+import { AnimatePresence, motion } from 'framer-motion';
 
 /**
  * Modal dialog for adding a new pet.
- * 
- * @param {Object} props
- * @param {boolean} props.open - Modal open state
- * @param {Function} props.onClose - Modal close handler
  */
-const AddPetModal = ({ open, onClose }) => {
+export default function AddPetModal({ open, onClose }) {
   const { addPet } = usePets();
-  const [loading, setLoading] = useState(false);
-  const [snackbar, setSnackbar] = useState({ open: false, message: '', severity: 'success' });
 
   const handleSubmit = async (formData) => {
-    setLoading(true);
     const result = await addPet(formData);
-    setLoading(false);
-    
     if (result) {
-      setSnackbar({ open: true, message: 'Pet added successfully!', severity: 'success' });
-      onClose(); // Close modal on success
-    } else {
-      setSnackbar({ open: true, message: 'Failed to add pet. Please try again.', severity: 'error' });
+      onClose();
     }
   };
 
-  const handleSnackbarClose = () => {
-    setSnackbar({ ...snackbar, open: false });
-  };
-
   return (
-    <>
-      <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth>
-        <DialogTitle sx={{ m: 0, p: 2, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          Add New Pet listing
-          <IconButton onClick={onClose}>
-            <CloseIcon />
-          </IconButton>
-        </DialogTitle>
-        <DialogContent dividers>
-          <PetForm 
-            onSubmit={handleSubmit} 
-            onCancel={onClose} 
-            loading={loading} 
-          />
-        </DialogContent>
-      </Dialog>
-
-      <Snackbar 
-        open={snackbar.open} 
-        autoHideDuration={6000} 
-        onClose={handleSnackbarClose}
-        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
-      >
-        <Alert onClose={handleSnackbarClose} severity={snackbar.severity} sx={{ width: '100%' }}>
-          {snackbar.message}
-        </Alert>
-      </Snackbar>
-    </>
+    <Dialog 
+      open={open} 
+      onClose={onClose}
+      fullWidth
+      maxWidth="sm"
+      PaperProps={{
+        sx: {
+          borderRadius: 4,
+          padding: 1,
+          background: 'rgba(255, 255, 255, 0.9)',
+          backdropFilter: 'blur(10px)',
+          border: '1px solid rgba(255, 255, 255, 0.3)',
+        }
+      }}
+    >
+      <DialogTitle sx={{ m: 0, p: 2, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        Add New Pet
+        <IconButton onClick={onClose} size="small">
+          <X size={20} />
+        </IconButton>
+      </DialogTitle>
+      <DialogContent dividers>
+        <PetForm 
+          onSubmit={handleSubmit} 
+          onCancel={onClose} 
+        />
+      </DialogContent>
+    </Dialog>
   );
-};
-
-export default AddPetModal;
+}

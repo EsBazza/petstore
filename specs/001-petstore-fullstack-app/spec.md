@@ -127,8 +127,30 @@ Users can click on a pet to view full details in a dedicated view or expanded ca
 - **FR-015**: System MUST follow RESTful API design principles for all backend endpoints
 - **FR-016**: System MUST implement comprehensive error handling and meaningful error messages for all user interactions
 - **FR-017**: Frontend code MUST use JavaScript with JSDoc annotations for type safety and documentation without requiring a TypeScript compilation step
+- **FR-018**: System SHOULD implement **Optimistic Updates** for all CRUD operations to provide an "instant" feel (UI updates before API confirmation).
+- **FR-019**: System MUST implement a **Glassmorphism** design aesthetic with backdrop blurs and soft shadows.
 
-### Key Entities
+### Non-Functional Requirements
+- **NFR-001**: System MUST provide smooth transitions and animations using `framer-motion` for all state changes (e.g., modal opening, list updates).
+- **NFR-002**: System MUST provide non-blocking toast notifications for all operations using `sonner`.
+
+
+---
+
+### User Story 6 - Filter Pets (Priority: P2)
+
+Users can search for pets by name and filter by price to quickly find their ideal companion.
+
+**Why this priority**: Filtering and searching improve the user experience as the pet catalog grows, allowing users to find specific pets efficiently.
+
+**Independent Test**: Can be tested by typing in the search bar and/or adjusting price filters to verify the list of pets updates in real-time.
+
+**Acceptance Scenarios**:
+
+1. **Given** the user is on the petstore browsing page, **When** they type a partial pet name in the search bar, **Then** only pets whose names contain the search term are displayed
+2. **Given** the user is viewing pets, **When** they set a maximum price filter, **Then** only pets with a price less than or equal to the selected value are displayed
+3. **Given** multiple filters are applied, **When** the user modifies the search or price range, **Then** the pet list updates to reflect the combined active filters
+4. **Given** active filters are applied, **When** the user clears all filters, **Then** the original complete pet list is displayed again
 
 - **Pet**: Represents an individual pet in the petstore with attributes: id (unique identifier), name (string), description (text), price (decimal), imageUrl (string/URI), createdAt (timestamp), updatedAt (timestamp)
 - **PetStore**: Logical collection of all pets available in the system, managed through the backend database
@@ -147,6 +169,8 @@ Users can click on a pet to view full details in a dedicated view or expanded ca
 - **SC-008**: E2E test suite passes all CRUD workflows (create, read, update, delete) with 100% successful execution (measurable: automated E2E tests covering complete user journeys from pet list → add → edit → delete → verify removal)
 - **SC-009**: The UI uses MUI components and custom styling that creates a visually playful and engaging experience
 - **SC-010**: Code follows clean code principles with meaningful variable names, proper JSDoc documentation, and consistent formatting across frontend (JavaScript) and backend (Java)
+- **SC-011**: **Perceived Performance**: UI updates for CRUD operations MUST happen within 100ms (Optimistic UI).
+- **SC-012**: **Visual Polish**: Staggered animations for list items and smooth modal transitions.
 
 ## Assumptions
 

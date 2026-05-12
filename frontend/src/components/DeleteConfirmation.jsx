@@ -11,13 +11,6 @@ import {
 
 /**
  * Confirmation dialog for deleting a pet.
- * 
- * @param {Object} props
- * @param {boolean} props.open - Dialog open state
- * @param {string} props.petName - Name of the pet to delete
- * @param {Function} props.onClose - Dialog close handler
- * @param {Function} props.onConfirm - Delete confirmation handler
- * @param {boolean} props.loading - Loading state of the deletion
  */
 const DeleteConfirmation = ({ open, petName, onClose, onConfirm, loading }) => {
   return (
@@ -26,6 +19,14 @@ const DeleteConfirmation = ({ open, petName, onClose, onConfirm, loading }) => {
       onClose={onClose}
       aria-labelledby="delete-dialog-title"
       aria-describedby="delete-dialog-description"
+      PaperProps={{
+        sx: {
+          borderRadius: 4,
+          background: 'rgba(255, 255, 255, 0.9)',
+          backdropFilter: 'blur(10px)',
+          border: '1px solid rgba(255, 255, 255, 0.3)',
+        }
+      }}
     >
       <DialogTitle id="delete-dialog-title">
         Confirm Deletion
@@ -36,7 +37,7 @@ const DeleteConfirmation = ({ open, petName, onClose, onConfirm, loading }) => {
         </DialogContentText>
       </DialogContent>
       <DialogActions sx={{ px: 3, pb: 2 }}>
-        <Button onClick={onClose} disabled={loading} variant="outlined">
+        <Button onClick={onClose} disabled={loading}>
           Cancel
         </Button>
         <Button 

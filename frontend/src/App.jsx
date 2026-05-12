@@ -1,3 +1,4 @@
+import { Toaster } from 'sonner'
 import './index.css'
 import { ThemeProvider } from '@mui/material/styles'
 import CssBaseline from '@mui/material/CssBaseline'
@@ -14,6 +15,7 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
+      <Toaster position="top-center" richColors />
       <Router>
         <Routes>
           <Route path="/" element={<HomePage />} />

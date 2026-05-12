@@ -3,107 +3,77 @@ package com.petstore.config;
 import com.petstore.exception.PetNotFoundException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.stream.Collectors;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpHeaders;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.context.request.WebRequest;
-import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 /**
- * Global exception handler for the application.
- * 
- * Handles exceptions across all controllers and provides consistent error responses.
+ * Global exception handler for the Petstore API.
  */
-@Slf4j
 @ControllerAdvice
-public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
+public class GlobalExceptionHandler {
+
+  private static final Logger log = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
   /**
    * Handle PetNotFoundException.
-   *
-   * @param ex the exception
-   * @param request the web request
-   * @return 404 error response
    */
   @ExceptionHandler(PetNotFoundException.class)
-  @ResponseStatus(HttpStatus.NOT_FOUND)
   public ResponseEntity<ErrorResponse> handlePetNotFoundException(
       PetNotFoundException ex, WebRequest request) {
     log.error("Pet not found: {}", ex.getMessage());
-    
-    ErrorResponse errorResponse = ErrorResponse.builder()
+    ErrorResponse error = ErrorResponse.builder()
+        .timestamp(System.currentTimeMillis())
         .status(HttpStatus.NOT_FOUND.value())
         .message(ex.getMessage())
-        .timestamp(System.currentTimeMillis())
-        .path(request.getDescription(false).replace("uri=", ""))
+        .path(request.getDescription(false))
         .build();
-    
-    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
+    return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
   }
 
   /**
-   * Handle validation errors by overriding ResponseEntityExceptionHandler method.
-   *
-   * @param ex the exception
-   * @param headers the headers
-   * @param status the status
-   * @param request the web request
-   * @return 400 error response with validation details
+   * Handle validation exceptions.
    */
-  @Override
-  protected ResponseEntity<Object> handleMethodArgumentNotValid(
-      MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
-    
-    Map<String, String> errors = ex.getBindingResult()
-        .getFieldErrors()
-        .stream()
-        .collect(Collectors.toMap(
-            error -> error.getField(),
-            error -> error.getDefaultMessage(),
-            (existing, replacement) -> existing
-        ));
-    
-    log.warn("Validation error: {}", errors);
+  @ExceptionHandler(MethodArgumentNotValidException.class)
+  public ResponseEntity<ErrorResponse> handleValidationExceptions(
+      MethodArgumentNotValidException ex, WebRequest request) {
+    Map<String, String> details = new HashMap<>();
+    ex.getBindingResult().getAllErrors().forEach((error) -> {
+      String fieldName = ((FieldError) error).getField();
+      String errorMessage = error.getDefaultMessage();
+      details.put(fieldName, errorMessage);
+    });
 
-    ErrorResponse errorResponse = ErrorResponse.builder()
-        .status(status.value())
-        .message("Validation failed")
+    log.error("Validation failed: {}", details);
+    ErrorResponse error = ErrorResponse.builder()
         .timestamp(System.currentTimeMillis())
-        .path(request.getDescription(false).replace("uri=", ""))
-        .details(errors)
+        .status(HttpStatus.BAD_REQUEST.value())
+        .message("Validation failed")
+        .path(request.getDescription(false))
+        .details(details)
         .build();
-    
-    return ResponseEntity.status(status).body(errorResponse);
+    return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
   }
 
   /**
-   * Handle general exceptions.
-   *
-   * @param ex the exception
-   * @param request the web request
-   * @return 500 error response
+   * Handle generic exceptions.
    */
   @ExceptionHandler(Exception.class)
-  @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-  public ResponseEntity<ErrorResponse> handleGeneralException(
+  public ResponseEntity<ErrorResponse> handleGlobalException(
       Exception ex, WebRequest request) {
-    
-    log.error("Unexpected error occurred", ex);
-    
-    ErrorResponse errorResponse = ErrorResponse.builder()
-        .status(HttpStatus.INTERNAL_SERVER_ERROR.value())
-        .message("An unexpected error occurred. Please try again later.")
+    log.error("An unexpected error occurred: ", ex);
+    ErrorResponse error = ErrorResponse.builder()
         .timestamp(System.currentTimeMillis())
-        .path(request.getDescription(false).replace("uri=", ""))
+        .status(HttpStatus.INTERNAL_SERVER_ERROR.value())
+        .message("An unexpected error occurred")
+        .path(request.getDescription(false))
         .build();
-    
-    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
+    return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
   }
 }

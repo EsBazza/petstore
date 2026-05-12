@@ -169,6 +169,8 @@ npm run format
 
 Petstore is configured for easy deployment to Render.com with Docker containers.
 
+> **Note on Free Tier:** The project is configured for Render's free tier. **Important**: Render's free PostgreSQL database expires after 90 days. If the project is inactive or needs longer-term persistence, you will need to upgrade to a paid plan or migrate the database.
+
 **Quick Deploy (3 steps):**
 
 1. **Push to GitHub**

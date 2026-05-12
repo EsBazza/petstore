@@ -1,37 +1,43 @@
 package com.petstore.dto;
 
 import java.math.BigDecimal;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.Pattern;
 
 /**
  * Data Transfer Object for updating an existing pet.
- * 
- * All fields are optional to allow partial updates.
  */
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
 public class PetUpdateRequest {
 
-  /**
-   * Updated pet name (optional).
-   */
   private String name;
 
-  /**
-   * Updated pet description (optional).
-   */
   private String description;
 
-  /**
-   * Updated pet price (optional).
-   */
+  @DecimalMin(value = "0.0", inclusive = false, message = "Price must be greater than 0")
   private BigDecimal price;
 
-  /**
-   * Updated pet image URL (optional).
-   */
+  @Pattern(
+    regexp = "^(https?://)?[-a-zA-Z0-9@:%._\\+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b([-a-zA-Z0-9()@:%_\\+.~#?&/=]*)?$|^$",
+    message = "Image URL must be a valid URL"
+  )
   private String imageUrl;
+
+  public PetUpdateRequest() {}
+
+  public PetUpdateRequest(String name, String description, BigDecimal price, String imageUrl) {
+    this.name = name;
+    this.description = description;
+    this.price = price;
+    this.imageUrl = imageUrl;
+  }
+
+  // Getters and Setters
+  public String getName() { return name; }
+  public void setName(String name) { this.name = name; }
+  public String getDescription() { return description; }
+  public void setDescription(String description) { this.description = description; }
+  public BigDecimal getPrice() { return price; }
+  public void setPrice(BigDecimal price) { this.price = price; }
+  public String getImageUrl() { return imageUrl; }
+  public void setImageUrl(String imageUrl) { this.imageUrl = imageUrl; }
 }
