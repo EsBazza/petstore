@@ -15,7 +15,7 @@ COPY frontend ./frontend
 RUN cd frontend && npm run build
 
 # Stage 3: Runtime - Spring Boot with static frontend files
-FROM eclipse-temurin:17-jre-slim
+FROM openjdk:17-alpine
 WORKDIR /app
 
 # Copy built backend JAR
