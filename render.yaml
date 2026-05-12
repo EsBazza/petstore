@@ -1,45 +1,29 @@
 services:
   - type: web
     name: petstore-backend
-    runtime: java
+    runtime: docker
     plan: free
-    buildCommand: "cd backend && mvn clean package"
-    startCommand: "java -jar backend/target/petstore-api-1.0.0.jar"
     healthCheckPath: /alonzo/api/health
     envVars:
       - key: PORT
         value: 8080
       - key: SPRING_PROFILES_ACTIVE
         value: prod
-      - key: SPRING_DATASOURCE_URL
+      - key: DATABASE_URL
         fromDatabase:
           name: petstore-postgres
           property: connectionString
-      - key: SPRING_DATASOURCE_USERNAME
-        fromDatabase:
-          name: petstore-postgres
-          property: user
-      - key: SPRING_DATASOURCE_PASSWORD
-        fromDatabase:
-          name: petstore-postgres
-          property: password
 
-  - type: web
+  - type: static
     name: petstore-frontend
-    runtime: static site
-    buildCommand: "cd frontend && npm install && npm run build"
-    staticPublishPath: frontend/dist
+    buildCommand: "npm install && npm run build"
+    publishPath: frontend/dist
     envVars:
       - key: VITE_API_BASE_URL
         value: https://petstore-backend.onrender.com/alonzo/api
 
-  - type: pserv
+  - type: postgres
     name: petstore-postgres
     plan: free
-    envVars:
-      - key: POSTGRES_DB
-        value: petstore_db
-      - key: POSTGRES_USER
-        value: petstore_user
-      - key: POSTGRES_PASSWORD
-        generateValue: true
+    databaseName: petstore_db
+    user: petstore_user
