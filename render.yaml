@@ -1,5 +1,5 @@
 services:
-  - type: web
+  - type: static
     name: petstore-backend
     runtime: java
     plan: free
