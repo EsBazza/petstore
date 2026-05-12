@@ -14,9 +14,8 @@ services:
           name: petstore-postgres
           property: connectionString
 
-  - type: static
+  - type: static_site
     name: petstore-frontend
-    runtime: static
     buildCommand: "npm install && npm run build"
     publishPath: frontend/dist
     envVars:
