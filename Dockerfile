@@ -1,13 +1,13 @@
 # Multi-stage Dockerfile for Petstore application
 # Stage 1: Build backend JAR
-FROM maven:3.8.4-openjdk-17 as backend-builder
+FROM maven:3.8.4-openjdk-17 AS backend-builder
 WORKDIR /app
 COPY backend/pom.xml ./backend/
 COPY backend/src ./backend/src
 RUN cd backend && mvn clean package -DskipTests
 
 # Stage 2: Build frontend
-FROM node:20-alpine as frontend-builder
+FROM node:20-alpine AS frontend-builder
 WORKDIR /app
 COPY frontend/package*.json ./frontend/
 RUN cd frontend && npm ci

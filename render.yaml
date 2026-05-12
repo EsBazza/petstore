@@ -14,16 +14,6 @@ services:
           name: petstore-postgres
           property: connectionString
 
-  - type: web
-    name: petstore-frontend
-    runtime: node
-    plan: free
-    buildCommand: "cd frontend && npm install && npm run build"
-    startCommand: "npm install -g serve && serve -s frontend/dist -l 3000"
-    envVars:
-      - key: VITE_API_BASE_URL
-        value: https://petstore-backend.onrender.com/alonzo/api
-
 databases:
   - name: petstore-postgres
     plan: free
