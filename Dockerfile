@@ -15,7 +15,7 @@ COPY frontend ./frontend
 RUN cd frontend && npm run build
 
 # Stage 3: Runtime - Spring Boot with static frontend files
-FROM openjdk:17-alpine
+FROM amazoncorretto:17-alpine
 WORKDIR /app
 
 # Copy built backend JAR
