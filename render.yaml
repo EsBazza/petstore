@@ -15,16 +15,16 @@ services:
           name: petstore-postgres
           property: connectionString
 
-  # Frontend Service (Fixed)
+  # Frontend Service
   - type: web
     name: petstore-frontend
     runtime: static
-    plan: free
+    # REMOVED 'plan: free' - static sites are free by default in blueprints
     staticPublishPath: ./frontend/dist
     buildCommand: cd frontend && npm install && npm run build
 
 databases:
   - name: petstore-postgres
+    plan: free
     databaseName: petstore_db
     user: petstore_user
-    plan: free
