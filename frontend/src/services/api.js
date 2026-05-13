@@ -6,7 +6,7 @@ import axios from 'axios'
  * Configures Axios with base URL and handles common error scenarios.
  */
 
-const baseURL = import.meta.env.VITE_API_BASE_URL || '/alonzo/api'
+const baseURL = import.meta.env.VITE_API_BASE_URL || '/api'
 
 const apiClient = axios.create({
   baseURL,
