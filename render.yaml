@@ -1,4 +1,5 @@
 services:
+  # Backend Service
   - type: web
     name: petstore-backend
     runtime: docker
@@ -14,8 +15,10 @@ services:
           name: petstore-postgres
           property: connectionString
 
-  - type: static_site
+  # Frontend Service (Fixed)
+  - type: web
     name: petstore-frontend
+    runtime: static
     plan: free
     staticPublishPath: ./frontend/dist
     buildCommand: cd frontend && npm install && npm run build
