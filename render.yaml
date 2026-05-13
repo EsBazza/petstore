@@ -4,7 +4,7 @@ services:
     name: petstore-backend
     runtime: docker
     plan: free
-    healthCheckPath: /api/health
+    healthCheckPath: /alonzo/api/health
     envVars:
       - key: PORT
         value: 8080
@@ -24,7 +24,7 @@ services:
     buildCommand: cd frontend && npm install && npm run build
     envVars:
       - key: VITE_API_BASE_URL
-        value: https://petstore-backend.onrender.com/api
+        value: https://petstore-backend.onrender.com/alonzo/api
 
 databases:
   - name: petstore-postgres
