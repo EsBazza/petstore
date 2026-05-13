@@ -4,8 +4,6 @@ services:
     runtime: docker
     plan: free
     healthCheckPath: /alonzo/api/health
-    # Optional: Docker services often need a startCommand if not in Dockerfile
-    # startCommand: java -jar app.jar 
     envVars:
       - key: PORT
         value: 8080
@@ -16,15 +14,8 @@ services:
           name: petstore-postgres
           property: connectionString
 
-static_sites:
-  - name: petstore-frontend
-    runtime: static
-    plan: free
-    staticPublishPath: ./frontend/dist
-    buildCommand: cd frontend && npm install && npm run build
-
 databases:
   - name: petstore-postgres
-    plan: free
     databaseName: petstore_db
     user: petstore_user
+    plan: free
