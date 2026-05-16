@@ -1,8 +1,24 @@
 package com.petstore.controller;
 
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.hamcrest.Matchers.hasSize;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MockMvc;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -16,18 +32,6 @@ import com.petstore.dto.PetResponse;
 import com.petstore.dto.PetUpdateRequest;
 import com.petstore.exception.PetNotFoundException;
 import com.petstore.service.PetService;
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MockMvc;
 
 /**
  * Unit tests for PetController.
@@ -65,15 +69,16 @@ class PetControllerTest {
     // Arrange
     List<PetResponse> pets = new ArrayList<>();
     pets.add(testPetResponse);
-    when(petService.getAllPets()).thenReturn(pets);
+    Page<PetResponse> page = new PageImpl<>(pets);
+    when(petService.getPetsPaginated(any(Pageable.class))).thenReturn(page);
 
     // Act & Assert
     mockMvc.perform(get("/api/pets"))
         .andExpect(status().isOk())
-        .andExpect(jsonPath("$", hasSize(1)))
-        .andExpect(jsonPath("$[0].id").value(1L))
-        .andExpect(jsonPath("$[0].name").value("Fluffy"))
-        .andExpect(jsonPath("$[0].price").value(99.99));
+        .andExpect(jsonPath("$.content", hasSize(1)))
+        .andExpect(jsonPath("$.content[0].id").value(1L))
+        .andExpect(jsonPath("$.content[0].name").value("Fluffy"))
+        .andExpect(jsonPath("$.content[0].price").value(99.99));
   }
 
   @Test
@@ -162,12 +167,13 @@ class PetControllerTest {
   void testGetAllPetsReturnsEmptyList() throws Exception {
     // Arrange
     List<PetResponse> pets = new ArrayList<>();
-    when(petService.getAllPets()).thenReturn(pets);
+    Page<PetResponse> page = new PageImpl<>(pets);
+    when(petService.getPetsPaginated(any(Pageable.class))).thenReturn(page);
 
     // Act & Assert
     mockMvc.perform(get("/api/pets"))
         .andExpect(status().isOk())
-        .andExpect(jsonPath("$", hasSize(0)));
+        .andExpect(jsonPath("$.content", hasSize(0)));
   }
 
   @Test
@@ -191,16 +197,17 @@ class PetControllerTest {
     pets.add(pet2); // Newer pet first
     pets.add(pet1); // Older pet second
     
-    when(petService.getAllPets()).thenReturn(pets);
+    Page<PetResponse> page = new PageImpl<>(pets);
+    when(petService.getPetsPaginated(any(Pageable.class))).thenReturn(page);
 
     // Act & Assert
     mockMvc.perform(get("/api/pets"))
         .andExpect(status().isOk())
-        .andExpect(jsonPath("$", hasSize(2)))
-        .andExpect(jsonPath("$[0].id").value(2L))
-        .andExpect(jsonPath("$[0].name").value("Buddy"))
-        .andExpect(jsonPath("$[1].id").value(1L))
-        .andExpect(jsonPath("$[1].name").value("Fluffy"));
+        .andExpect(jsonPath("$.content", hasSize(2)))
+        .andExpect(jsonPath("$.content[0].id").value(2L))
+        .andExpect(jsonPath("$.content[0].name").value("Buddy"))
+        .andExpect(jsonPath("$.content[1].id").value(1L))
+        .andExpect(jsonPath("$.content[1].name").value("Fluffy"));
   }
 
   @Test
@@ -209,12 +216,13 @@ class PetControllerTest {
     // Arrange
     List<PetResponse> pets = new ArrayList<>();
     pets.add(testPetResponse);
-    when(petService.getAllPets()).thenReturn(pets);
+    Page<PetResponse> page = new PageImpl<>(pets);
+    when(petService.getPetsPaginated(any(Pageable.class))).thenReturn(page);
 
     // Act & Assert
     mockMvc.perform(get("/api/pets"))
         .andExpect(status().isOk())
-        .andExpect(jsonPath("$", hasSize(1)))
+        .andExpect(jsonPath("$.content", hasSize(1)))
         .andExpect(result -> {
           String contentType = result.getResponse().getContentType();
           assert contentType != null && contentType.contains("application/json");

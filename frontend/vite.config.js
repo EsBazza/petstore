@@ -13,7 +13,7 @@ export default defineConfig({
     strictPort: false,
     open: true,
     proxy: {
-      '/alonzo/api': {
+      '/alonzo': {
         target: 'http://localhost:8080',
         changeOrigin: true,
       },
