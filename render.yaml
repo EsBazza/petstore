@@ -24,7 +24,7 @@ services:
     buildCommand: cd frontend && npm install && npm run build
     envVars:
       - key: VITE_API_BASE_URL
-        value: https://petstore-backend.onrender.com/alonzo/api
+        value: https://petstore-backend-985x.onrender.com/alonzo/api
 
 databases:
   - name: petstore-postgres
